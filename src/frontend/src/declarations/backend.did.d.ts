@@ -12,9 +12,14 @@ import type { Principal } from '@icp-sdk/core/principal';
 
 export type ClassLabel = string;
 export type ExternalBlob = Uint8Array;
+export type Language = { 'hindi' : null } |
+  { 'english' : null };
+export type ParagraphNumber = bigint;
 export interface Recording {
   'id' : RecordingId,
+  'paragraphNumber' : ParagraphNumber,
   'externalBlob' : ExternalBlob,
+  'language' : Language,
   'classLabel' : ClassLabel,
 }
 export type RecordingId = string;
@@ -45,11 +50,20 @@ export interface _SERVICE {
     _CaffeineStorageRefillResult
   >,
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
-  'createRecording' : ActorMethod<[ClassLabel, ExternalBlob], RecordingId>,
+  'createRecording' : ActorMethod<
+    [ClassLabel, ExternalBlob, Language, ParagraphNumber],
+    RecordingId
+  >,
   'deleteRecording' : ActorMethod<[RecordingId], undefined>,
   'getAllRecordingIds' : ActorMethod<[], Array<RecordingId>>,
   'getRecording' : ActorMethod<[RecordingId], Recording>,
   'getRecordingsByClass' : ActorMethod<[ClassLabel], Array<Recording>>,
+  'getRecordingsByClassAndLanguage' : ActorMethod<
+    [ClassLabel, Language],
+    Array<Recording>
+  >,
+  'getRecordingsByLanguage' : ActorMethod<[Language], Array<Recording>>,
+  'getRecordingsByParagraph' : ActorMethod<[ParagraphNumber], Array<Recording>>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

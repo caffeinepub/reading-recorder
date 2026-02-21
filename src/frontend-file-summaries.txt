@@ -4,13 +4,13 @@
   "frontend/src/pages/RecordingPage.tsx": "Recording page wrapper that displays the RecordingInterface component with a title and description.",
   "frontend/src/pages/PlaybackPage.tsx": "Playback page managing selected recording state and displaying RecordingsList alongside PlaybackControls in a responsive grid layout.",
   "frontend/src/pages/SettingsPage.tsx": "Comprehensive settings page with organized sections for recording quality, storage management, and playback preferences using shadcn/ui form components.",
-  "frontend/src/components/RecordingInterface.tsx": "Main recording interface with class selection (2-7), animated recording button with visual feedback, duration timer, upload progress, and success/error alerts; properly converts audio blob to Uint8Array<ArrayBuffer> by creating a new ArrayBuffer.",
-  "frontend/src/components/RecordingsList.tsx": "Displays all recordings organized by tabs (all/class 2-7) with selection, playback, and delete functionality including confirmation dialog.",
+  "frontend/src/components/RecordingInterface.tsx": "Recording interface with language selector (Hindi/English), class selector (2-7), paragraph number input, animated recording button with visual feedback, duration timer, upload progress, and success/error alerts; persists selections to localStorage and passes all parameters to createRecording mutation.",
+  "frontend/src/components/RecordingsList.tsx": "Displays recordings organized by class tabs with language and paragraph filtering UI; shows language badges (Hindi/English with distinct colors) and paragraph number badges for each recording; includes selection, playback, and delete functionality with confirmation dialog.",
   "frontend/src/components/PlaybackControls.tsx": "Audio playback controls with play/pause button, seek slider, time display, and recording metadata for the selected recording.",
   "frontend/src/hooks/useAudioRecorder.ts": "Custom hook managing Web Audio API recording state, including start/stop controls, duration tracking, and conversion to Uint8Array format.",
   "frontend/src/hooks/useAudioPlayer.ts": "Custom hook managing HTML5 Audio playback with play/pause/seek controls, time tracking, and playback speed from settings.",
   "frontend/src/hooks/useSettings.ts": "Custom hook managing application settings with localStorage persistence, including recording quality, storage, and playback preferences.",
-  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including fetching recordings, creating recordings with ExternalBlob, and deleting recordings with cache invalidation.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including fetching recordings by class/language/paragraph, creating recordings with language and paragraph parameters, and deleting recordings with proper cache invalidation.",
   "frontend/src/index.css": "Global styles with warm, accessible OKLCH color system featuring amber/orange recording tones and calm blue playback tones for both light and dark modes.",
   "frontend/tailwind.config.js": "Extended Tailwind configuration with custom recording/playback color tokens, Inter font family, and enhanced spacing/shadow utilities for audio interface."
 }

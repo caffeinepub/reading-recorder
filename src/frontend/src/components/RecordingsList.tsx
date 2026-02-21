@@ -1,11 +1,16 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useGetAllRecordings, useDeleteRecording } from '../hooks/useQueries';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useGetAllRecordings, useGetRecordingsByLanguage, useGetRecordingsByParagraph, useDeleteRecording } from '../hooks/useQueries';
 import { Trash2, PlayCircle, Loader2 } from 'lucide-react';
 import type { Recording } from '../backend';
+import { Language } from '../backend';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,9 +28,17 @@ interface RecordingsListProps {
 }
 
 export default function RecordingsList({ selectedRecording, onSelectRecording }: RecordingsListProps) {
-  const { data: recordings, isLoading } = useGetAllRecordings();
-  const deleteRecording = useDeleteRecording();
+  const [languageFilter, setLanguageFilter] = useState<string>('all');
+  const [paragraphFilter, setParagraphFilter] = useState<string>('');
   const [recordingToDelete, setRecordingToDelete] = useState<string | null>(null);
+  
+  const { data: allRecordings, isLoading: isLoadingAll } = useGetAllRecordings();
+  const { data: hindiRecordings, isLoading: isLoadingHindi } = useGetRecordingsByLanguage(Language.hindi);
+  const { data: englishRecordings, isLoading: isLoadingEnglish } = useGetRecordingsByLanguage(Language.english);
+  const paragraphNum = paragraphFilter ? BigInt(paragraphFilter) : null;
+  const { data: paragraphRecordings, isLoading: isLoadingParagraph } = useGetRecordingsByParagraph(paragraphNum);
+  
+  const deleteRecording = useDeleteRecording();
 
   const handleDelete = async () => {
     if (recordingToDelete) {
@@ -37,8 +50,34 @@ export default function RecordingsList({ selectedRecording, onSelectRecording }:
     }
   };
 
+  const getFilteredRecordings = () => {
+    let recordings = allRecordings || [];
+
+    // Apply language filter
+    if (languageFilter === 'hindi') {
+      recordings = hindiRecordings || [];
+    } else if (languageFilter === 'english') {
+      recordings = englishRecordings || [];
+    }
+
+    // Apply paragraph filter
+    if (paragraphFilter && paragraphRecordings) {
+      const paragraphIds = new Set(paragraphRecordings.map(r => r.id));
+      recordings = recordings.filter(r => paragraphIds.has(r.id));
+    }
+
+    return recordings;
+  };
+
   const getRecordingsByClass = (classLabel: string) => {
-    return recordings?.filter((rec) => rec.classLabel === classLabel) || [];
+    const filtered = getFilteredRecordings();
+    return filtered.filter((rec) => rec.classLabel === classLabel);
+  };
+
+  const getLanguageBadgeColor = (language: Language) => {
+    return language === Language.hindi 
+      ? 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20' 
+      : 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20';
   };
 
   const renderRecordingItem = (recording: Recording) => {
@@ -57,8 +96,18 @@ export default function RecordingsList({ selectedRecording, onSelectRecording }:
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <PlayCircle className={`w-5 h-5 flex-shrink-0 ${isSelected ? 'text-playback' : 'text-muted-foreground'}`} />
           <div className="flex-1 min-w-0">
-            <p className="font-medium text-sm truncate">{recording.id}</p>
-            <p className="text-xs text-muted-foreground">Class {recording.classLabel}</p>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="font-medium text-sm truncate">{recording.id}</p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-xs text-muted-foreground">Class {recording.classLabel}</p>
+              <Badge variant="outline" className={`text-xs ${getLanguageBadgeColor(recording.language)}`}>
+                {recording.language === Language.hindi ? 'Hindi' : 'English'}
+              </Badge>
+              <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20">
+                Para {recording.paragraphNumber.toString()}
+              </Badge>
+            </div>
           </div>
         </div>
         <Button
@@ -76,6 +125,8 @@ export default function RecordingsList({ selectedRecording, onSelectRecording }:
     );
   };
 
+  const isLoading = isLoadingAll || isLoadingHindi || isLoadingEnglish || isLoadingParagraph;
+
   if (isLoading) {
     return (
       <Card>
@@ -86,11 +137,42 @@ export default function RecordingsList({ selectedRecording, onSelectRecording }:
     );
   }
 
+  const filteredRecordings = getFilteredRecordings();
+
   return (
     <>
       <Card>
         <CardHeader>
           <CardTitle>Your Recordings</CardTitle>
+          
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="language-filter">Filter by Language</Label>
+              <Select value={languageFilter} onValueChange={setLanguageFilter}>
+                <SelectTrigger id="language-filter">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Languages</SelectItem>
+                  <SelectItem value="hindi">Hindi</SelectItem>
+                  <SelectItem value="english">English</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="paragraph-filter">Filter by Paragraph</Label>
+              <Input
+                id="paragraph-filter"
+                type="number"
+                min="1"
+                value={paragraphFilter}
+                onChange={(e) => setParagraphFilter(e.target.value)}
+                placeholder="All paragraphs"
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all" className="w-full">
@@ -105,13 +187,15 @@ export default function RecordingsList({ selectedRecording, onSelectRecording }:
 
             <TabsContent value="all" className="mt-4">
               <ScrollArea className="h-[500px] pr-4">
-                {recordings && recordings.length > 0 ? (
+                {filteredRecordings && filteredRecordings.length > 0 ? (
                   <div className="space-y-2">
-                    {recordings.map(renderRecordingItem)}
+                    {filteredRecordings.map(renderRecordingItem)}
                   </div>
                 ) : (
                   <div className="text-center py-12 text-muted-foreground">
-                    No recordings yet. Start recording to see them here.
+                    {allRecordings && allRecordings.length > 0 
+                      ? 'No recordings match the selected filters.'
+                      : 'No recordings yet. Start recording to see them here.'}
                   </div>
                 )}
               </ScrollArea>
@@ -126,7 +210,9 @@ export default function RecordingsList({ selectedRecording, onSelectRecording }:
                     </div>
                   ) : (
                     <div className="text-center py-12 text-muted-foreground">
-                      No recordings for Class {classNum}
+                      {allRecordings && allRecordings.length > 0 
+                        ? `No recordings for Class ${classNum} match the selected filters.`
+                        : `No recordings for Class ${classNum}`}
                     </div>
                   )}
                 </ScrollArea>

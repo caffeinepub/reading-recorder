@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import { useCreateRecording } from '../hooks/useQueries';
-import { ExternalBlob } from '../backend';
+import { ExternalBlob, Language } from '../backend';
 import { Mic, Square, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
@@ -20,13 +21,44 @@ const CLASS_OPTIONS = [
   { value: '7', label: 'Class 7' },
 ];
 
+const LANGUAGE_OPTIONS = [
+  { value: Language.hindi, label: 'Hindi' },
+  { value: Language.english, label: 'English' },
+];
+
 export default function RecordingInterface() {
   const [selectedClass, setSelectedClass] = useState<string>('2');
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.english);
+  const [paragraphNumber, setParagraphNumber] = useState<string>('1');
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [showSuccess, setShowSuccess] = useState(false);
   
   const { isRecording, duration, error: recorderError, startRecording, stopRecording } = useAudioRecorder();
   const createRecording = useCreateRecording();
+
+  // Load persisted values from localStorage
+  useEffect(() => {
+    const savedClass = localStorage.getItem('selectedClass');
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    const savedParagraph = localStorage.getItem('paragraphNumber');
+    
+    if (savedClass) setSelectedClass(savedClass);
+    if (savedLanguage) setSelectedLanguage(savedLanguage as Language);
+    if (savedParagraph) setParagraphNumber(savedParagraph);
+  }, []);
+
+  // Persist selections to localStorage
+  useEffect(() => {
+    localStorage.setItem('selectedClass', selectedClass);
+  }, [selectedClass]);
+
+  useEffect(() => {
+    localStorage.setItem('selectedLanguage', selectedLanguage);
+  }, [selectedLanguage]);
+
+  useEffect(() => {
+    localStorage.setItem('paragraphNumber', paragraphNumber);
+  }, [paragraphNumber]);
 
   const handleStartRecording = async () => {
     setShowSuccess(false);
@@ -46,9 +78,13 @@ export default function RecordingInterface() {
           setUploadProgress(percentage);
         });
         
+        const paragraphNum = BigInt(Math.max(1, parseInt(paragraphNumber) || 1));
+        
         await createRecording.mutateAsync({
           classLabel: selectedClass,
           externalBlob,
+          language: selectedLanguage,
+          paragraphNumber: paragraphNum,
         });
         
         setShowSuccess(true);
@@ -66,10 +102,34 @@ export default function RecordingInterface() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleParagraphChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '' || /^\d+$/.test(value)) {
+      setParagraphNumber(value);
+    }
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-8">
         <div className="space-y-6">
+          {/* Language Selection */}
+          <div className="space-y-2">
+            <Label htmlFor="language-select">Select Language</Label>
+            <Select value={selectedLanguage} onValueChange={(value) => setSelectedLanguage(value as Language)} disabled={isRecording}>
+              <SelectTrigger id="language-select">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {LANGUAGE_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Class Selection */}
           <div className="space-y-2">
             <Label htmlFor="class-select">Select Class (2-7)</Label>
@@ -85,6 +145,20 @@ export default function RecordingInterface() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Paragraph Number Input */}
+          <div className="space-y-2">
+            <Label htmlFor="paragraph-input">Paragraph Number</Label>
+            <Input
+              id="paragraph-input"
+              type="number"
+              min="1"
+              value={paragraphNumber}
+              onChange={handleParagraphChange}
+              disabled={isRecording}
+              placeholder="Enter paragraph number"
+            />
           </div>
 
           {/* Recording Button */}

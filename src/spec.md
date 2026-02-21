@@ -1,14 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Create a web application for recording and playing back audio with a 2/7 class organizational structure and comprehensive settings.
+**Goal:** Add Hindi and English language support with paragraph-based organization to the reading recorder.
 
 **Planned changes:**
-- Implement backend with 2/7 class structure for organizing recording data models
-- Add audio recording functionality with start/stop controls and visual feedback
-- Add playback functionality with play, pause, and seek controls
-- Create comprehensive settings page for recording quality, storage, and playback preferences
-- Store recordings in backend with metadata (timestamp, duration) organized by 2/7 class structure
-- Design cohesive UI with warm colors, clear typography, and accessible controls
+- Add language selector (Hindi/English) to the recording interface
+- Add paragraph number input field to allow users to organize recordings by paragraph
+- Update backend data model to store language and paragraph information with each recording
+- Display language badges and paragraph numbers in the recordings list
+- Add filtering options for language and paragraph in the playback interface
 
-**User-visible outcome:** Users can record audio through their browser, organize recordings using the 2/7 class system, play back recordings with full playback controls, and configure all recording and playback settings through a comprehensive settings page.
+**User-visible outcome:** Users can select Hindi or English when recording, specify which paragraph they're recording, and filter their recordings by language and paragraph alongside the existing class structure.

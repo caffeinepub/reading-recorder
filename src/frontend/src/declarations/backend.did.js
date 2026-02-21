@@ -21,10 +21,17 @@ export const _CaffeineStorageRefillResult = IDL.Record({
 });
 export const ClassLabel = IDL.Text;
 export const ExternalBlob = IDL.Vec(IDL.Nat8);
+export const Language = IDL.Variant({
+  'hindi' : IDL.Null,
+  'english' : IDL.Null,
+});
+export const ParagraphNumber = IDL.Nat;
 export const RecordingId = IDL.Text;
 export const Recording = IDL.Record({
   'id' : RecordingId,
+  'paragraphNumber' : ParagraphNumber,
   'externalBlob' : ExternalBlob,
+  'language' : Language,
   'classLabel' : ClassLabel,
 });
 
@@ -55,12 +62,31 @@ export const idlService = IDL.Service({
       [],
     ),
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-  'createRecording' : IDL.Func([ClassLabel, ExternalBlob], [RecordingId], []),
+  'createRecording' : IDL.Func(
+      [ClassLabel, ExternalBlob, Language, ParagraphNumber],
+      [RecordingId],
+      [],
+    ),
   'deleteRecording' : IDL.Func([RecordingId], [], []),
   'getAllRecordingIds' : IDL.Func([], [IDL.Vec(RecordingId)], ['query']),
   'getRecording' : IDL.Func([RecordingId], [Recording], ['query']),
   'getRecordingsByClass' : IDL.Func(
       [ClassLabel],
+      [IDL.Vec(Recording)],
+      ['query'],
+    ),
+  'getRecordingsByClassAndLanguage' : IDL.Func(
+      [ClassLabel, Language],
+      [IDL.Vec(Recording)],
+      ['query'],
+    ),
+  'getRecordingsByLanguage' : IDL.Func(
+      [Language],
+      [IDL.Vec(Recording)],
+      ['query'],
+    ),
+  'getRecordingsByParagraph' : IDL.Func(
+      [ParagraphNumber],
       [IDL.Vec(Recording)],
       ['query'],
     ),
@@ -82,10 +108,14 @@ export const idlFactory = ({ IDL }) => {
   });
   const ClassLabel = IDL.Text;
   const ExternalBlob = IDL.Vec(IDL.Nat8);
+  const Language = IDL.Variant({ 'hindi' : IDL.Null, 'english' : IDL.Null });
+  const ParagraphNumber = IDL.Nat;
   const RecordingId = IDL.Text;
   const Recording = IDL.Record({
     'id' : RecordingId,
+    'paragraphNumber' : ParagraphNumber,
     'externalBlob' : ExternalBlob,
+    'language' : Language,
     'classLabel' : ClassLabel,
   });
   
@@ -116,12 +146,31 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-    'createRecording' : IDL.Func([ClassLabel, ExternalBlob], [RecordingId], []),
+    'createRecording' : IDL.Func(
+        [ClassLabel, ExternalBlob, Language, ParagraphNumber],
+        [RecordingId],
+        [],
+      ),
     'deleteRecording' : IDL.Func([RecordingId], [], []),
     'getAllRecordingIds' : IDL.Func([], [IDL.Vec(RecordingId)], ['query']),
     'getRecording' : IDL.Func([RecordingId], [Recording], ['query']),
     'getRecordingsByClass' : IDL.Func(
         [ClassLabel],
+        [IDL.Vec(Recording)],
+        ['query'],
+      ),
+    'getRecordingsByClassAndLanguage' : IDL.Func(
+        [ClassLabel, Language],
+        [IDL.Vec(Recording)],
+        ['query'],
+      ),
+    'getRecordingsByLanguage' : IDL.Func(
+        [Language],
+        [IDL.Vec(Recording)],
+        ['query'],
+      ),
+    'getRecordingsByParagraph' : IDL.Func(
+        [ParagraphNumber],
         [IDL.Vec(Recording)],
         ['query'],
       ),

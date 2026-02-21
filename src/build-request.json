@@ -1,131 +1,118 @@
 {
   "kind": "build_request",
-  "title": "Create recording and reading app with class structure",
+  "title": "Add Hindi and English language support with paragraph-based organization",
   "projectName": "Reading Recorder",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Create a 2/7 class structure in the backend to organize recording and reading data models",
+      "id": "REQ-7",
+      "text": "Add language selection support for Hindi and English in the recording interface, allowing users to specify the language of their recording",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "And recording of and recording, start Hindi English reading and in paragraph"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Recording interface includes a language selector with Hindi and English options",
+        "Selected language is stored with each recording in the backend",
+        "Language selection persists across recording sessions"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement paragraph-based organization for recordings, allowing users to segment and organize their recordings by paragraph units",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "And recording of and recording, start Hindi English reading and in paragraph"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend data model includes paragraph identification for recordings",
+        "Users can specify which paragraph a recording belongs to during recording",
+        "Recordings can be filtered and displayed by paragraph in the playback interface",
+        "Paragraph organization works alongside the existing 2-7 class structure"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Update the recording data model to include language (Hindi/English) and paragraph number fields alongside the existing class label structure",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "just Tara app make create one 2/7 class"
+          "And recording of and recording, start Hindi English reading and in paragraph"
         ]
       },
       "acceptanceCriteria": [
-        "Backend includes a class structure that supports the 2/7 organizational model",
-        "Data models are properly typed and structured for recording and reading features"
+        "Recording type includes language field accepting 'hindi' or 'english' values",
+        "Recording type includes paragraph number field",
+        "Backend API endpoints accept and return language and paragraph data",
+        "Migration preserves existing recordings while adding new fields"
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Implement audio recording functionality that allows users to create and save voice recordings",
+      "id": "REQ-10",
+      "text": "Enhance the RecordingInterface component with language selector dropdown (Hindi/English) and paragraph number input field",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "recording"
+          "And recording of and recording, start Hindi English reading and in paragraph"
         ]
       },
       "acceptanceCriteria": [
-        "Users can start and stop audio recording",
-        "Recordings are saved with metadata (timestamp, duration)",
-        "Recording interface shows visual feedback during capture"
+        "Language dropdown with Hindi and English options is displayed above the class selector",
+        "Paragraph number input field allows users to enter or select paragraph numbers",
+        "Selected language and paragraph are sent with recording data on upload",
+        "UI follows the existing warm, accessible design theme"
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "Implement reading playback functionality that allows users to play back recorded audio",
+      "id": "REQ-11",
+      "text": "Update RecordingsList component to display language and paragraph information for each recording, with optional filtering by language and paragraph",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "reading app"
+          "And recording of and recording, start Hindi English reading and in paragraph"
         ]
       },
       "acceptanceCriteria": [
-        "Users can select and play recordings",
-        "Playback controls include play, pause, and seek",
-        "Display playback progress and duration"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Create a comprehensive settings page with all configuration options for recording quality, storage preferences, and playback settings",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "all setting"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Settings page includes recording quality options",
-        "Settings page includes storage and data management options",
-        "Settings page includes playback preferences",
-        "Settings are persisted and applied across the application"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Store recordings in the backend with the 2/7 class organizational structure, enabling retrieval and management",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "recording",
-          "2/7 class"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend stores recording metadata and audio data",
-        "Recordings are organized according to the 2/7 class structure",
-        "CRUD operations are available for recording management"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Design a cohesive visual theme with warm, accessible colors and clear typography that emphasizes usability for a recording and reading application",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Application uses a consistent color palette suited for audio/reading applications",
-        "Typography is clear and readable",
-        "UI components follow a unified design language",
-        "Layout prioritizes ease of access to recording and playback controls"
+        "Recording list items show language badge (Hindi/English) and paragraph number",
+        "Users can filter recordings by language",
+        "Users can filter recordings by paragraph number",
+        "Filtering works in conjunction with existing class-based tabs"
       ]
     }
   ],
   "constraints": [
-    "Audio recording must work in modern web browsers using Web APIs",
-    "Backend must follow single-actor architecture for all data storage"
+    "Maintain compatibility with existing 2-7 class structure",
+    "Do not modify Internet Identity authentication hooks",
+    "Do not modify shadcn UI components in frontend/src/components/ui",
+    "Preserve single-actor backend architecture"
   ],
   "nonGoals": [
-    "Real-time collaboration features",
-    "External cloud storage integration",
-    "Mobile native app development"
+    "Real-time translation between Hindi and English",
+    "Text-to-speech synthesis",
+    "Automatic language detection",
+    "Speech-to-text transcription"
   ],
   "imageRequirements": {
-    "required": [
-      "Microphone icon for recording button in minimalist style (mic-icon.dim_64x64.png)",
-      "Playback icon for reading button in minimalist style (play-icon.dim_64x64.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

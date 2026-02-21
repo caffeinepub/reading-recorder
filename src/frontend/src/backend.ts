@@ -90,6 +90,7 @@ export class ExternalBlob {
     }
 }
 export type ClassLabel = string;
+export type ParagraphNumber = bigint;
 export interface _CaffeineStorageRefillInformation {
     proposed_top_up_amount?: bigint;
 }
@@ -100,12 +101,18 @@ export interface _CaffeineStorageCreateCertificateResult {
 }
 export interface Recording {
     id: RecordingId;
+    paragraphNumber: ParagraphNumber;
     externalBlob: ExternalBlob;
+    language: Language;
     classLabel: ClassLabel;
 }
 export interface _CaffeineStorageRefillResult {
     success?: boolean;
     topped_up_amount?: bigint;
+}
+export enum Language {
+    hindi = "hindi",
+    english = "english"
 }
 export interface backendInterface {
     _caffeineStorageBlobIsLive(hash: Uint8Array): Promise<boolean>;
@@ -114,13 +121,16 @@ export interface backendInterface {
     _caffeineStorageCreateCertificate(blobHash: string): Promise<_CaffeineStorageCreateCertificateResult>;
     _caffeineStorageRefillCashier(refillInformation: _CaffeineStorageRefillInformation | null): Promise<_CaffeineStorageRefillResult>;
     _caffeineStorageUpdateGatewayPrincipals(): Promise<void>;
-    createRecording(classLabel: ClassLabel, externalBlob: ExternalBlob): Promise<RecordingId>;
+    createRecording(classLabel: ClassLabel, externalBlob: ExternalBlob, language: Language, paragraphNumber: ParagraphNumber): Promise<RecordingId>;
     deleteRecording(id: RecordingId): Promise<void>;
     getAllRecordingIds(): Promise<Array<RecordingId>>;
     getRecording(id: RecordingId): Promise<Recording>;
     getRecordingsByClass(classLabel: ClassLabel): Promise<Array<Recording>>;
+    getRecordingsByClassAndLanguage(classLabel: ClassLabel, language: Language): Promise<Array<Recording>>;
+    getRecordingsByLanguage(language: Language): Promise<Array<Recording>>;
+    getRecordingsByParagraph(paragraphNumber: ParagraphNumber): Promise<Array<Recording>>;
 }
-import type { ClassLabel as _ClassLabel, ExternalBlob as _ExternalBlob, Recording as _Recording, RecordingId as _RecordingId, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
+import type { ClassLabel as _ClassLabel, ExternalBlob as _ExternalBlob, Language as _Language, ParagraphNumber as _ParagraphNumber, Recording as _Recording, RecordingId as _RecordingId, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _caffeineStorageBlobIsLive(arg0: Uint8Array): Promise<boolean> {
@@ -207,17 +217,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async createRecording(arg0: ClassLabel, arg1: ExternalBlob): Promise<RecordingId> {
+    async createRecording(arg0: ClassLabel, arg1: ExternalBlob, arg2: Language, arg3: ParagraphNumber): Promise<RecordingId> {
         if (this.processError) {
             try {
-                const result = await this.actor.createRecording(arg0, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg1));
+                const result = await this.actor.createRecording(arg0, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg1), to_candid_Language_n9(this._uploadFile, this._downloadFile, arg2), arg3);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createRecording(arg0, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg1));
+            const result = await this.actor.createRecording(arg0, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg1), to_candid_Language_n9(this._uploadFile, this._downloadFile, arg2), arg3);
             return result;
         }
     }
@@ -253,36 +263,81 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getRecording(arg0);
-                return from_candid_Recording_n9(this._uploadFile, this._downloadFile, result);
+                return from_candid_Recording_n11(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getRecording(arg0);
-            return from_candid_Recording_n9(this._uploadFile, this._downloadFile, result);
+            return from_candid_Recording_n11(this._uploadFile, this._downloadFile, result);
         }
     }
     async getRecordingsByClass(arg0: ClassLabel): Promise<Array<Recording>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getRecordingsByClass(arg0);
-                return from_candid_vec_n12(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getRecordingsByClass(arg0);
-            return from_candid_vec_n12(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getRecordingsByClassAndLanguage(arg0: ClassLabel, arg1: Language): Promise<Array<Recording>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getRecordingsByClassAndLanguage(arg0, to_candid_Language_n9(this._uploadFile, this._downloadFile, arg1));
+                return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getRecordingsByClassAndLanguage(arg0, to_candid_Language_n9(this._uploadFile, this._downloadFile, arg1));
+            return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getRecordingsByLanguage(arg0: Language): Promise<Array<Recording>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getRecordingsByLanguage(to_candid_Language_n9(this._uploadFile, this._downloadFile, arg0));
+                return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getRecordingsByLanguage(to_candid_Language_n9(this._uploadFile, this._downloadFile, arg0));
+            return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getRecordingsByParagraph(arg0: ParagraphNumber): Promise<Array<Recording>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getRecordingsByParagraph(arg0);
+                return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getRecordingsByParagraph(arg0);
+            return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
         }
     }
 }
-async function from_candid_ExternalBlob_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ExternalBlob): Promise<ExternalBlob> {
+async function from_candid_ExternalBlob_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ExternalBlob): Promise<ExternalBlob> {
     return await _downloadFile(value);
 }
-async function from_candid_Recording_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Recording): Promise<Recording> {
-    return await from_candid_record_n10(_uploadFile, _downloadFile, value);
+function from_candid_Language_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Language): Language {
+    return from_candid_variant_n15(_uploadFile, _downloadFile, value);
+}
+async function from_candid_Recording_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Recording): Promise<Recording> {
+    return await from_candid_record_n12(_uploadFile, _downloadFile, value);
 }
 function from_candid__CaffeineStorageRefillResult_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: __CaffeineStorageRefillResult): _CaffeineStorageRefillResult {
     return from_candid_record_n5(_uploadFile, _downloadFile, value);
@@ -293,18 +348,24 @@ function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Ar
 function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
     return value.length === 0 ? null : value[0];
 }
-async function from_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+async function from_candid_record_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     id: _RecordingId;
+    paragraphNumber: _ParagraphNumber;
     externalBlob: _ExternalBlob;
+    language: _Language;
     classLabel: _ClassLabel;
 }): Promise<{
     id: RecordingId;
+    paragraphNumber: ParagraphNumber;
     externalBlob: ExternalBlob;
+    language: Language;
     classLabel: ClassLabel;
 }> {
     return {
         id: value.id,
-        externalBlob: await from_candid_ExternalBlob_n11(_uploadFile, _downloadFile, value.externalBlob),
+        paragraphNumber: value.paragraphNumber,
+        externalBlob: await from_candid_ExternalBlob_n13(_uploadFile, _downloadFile, value.externalBlob),
+        language: from_candid_Language_n14(_uploadFile, _downloadFile, value.language),
         classLabel: value.classLabel
     };
 }
@@ -320,11 +381,21 @@ function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint
         topped_up_amount: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.topped_up_amount))
     };
 }
-async function from_candid_vec_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Recording>): Promise<Array<Recording>> {
-    return await Promise.all(value.map(async (x)=>await from_candid_Recording_n9(_uploadFile, _downloadFile, x)));
+function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    hindi: null;
+} | {
+    english: null;
+}): Language {
+    return "hindi" in value ? Language.hindi : "english" in value ? Language.english : value;
+}
+async function from_candid_vec_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Recording>): Promise<Array<Recording>> {
+    return await Promise.all(value.map(async (x)=>await from_candid_Recording_n11(_uploadFile, _downloadFile, x)));
 }
 async function to_candid_ExternalBlob_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ExternalBlob): Promise<_ExternalBlob> {
     return await _uploadFile(value);
+}
+function to_candid_Language_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Language): _Language {
+    return to_candid_variant_n10(_uploadFile, _downloadFile, value);
 }
 function to_candid__CaffeineStorageRefillInformation_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CaffeineStorageRefillInformation): __CaffeineStorageRefillInformation {
     return to_candid_record_n3(_uploadFile, _downloadFile, value);
@@ -340,6 +411,17 @@ function to_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8A
     return {
         proposed_top_up_amount: value.proposed_top_up_amount ? candid_some(value.proposed_top_up_amount) : candid_none()
     };
+}
+function to_candid_variant_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Language): {
+    hindi: null;
+} | {
+    english: null;
+} {
+    return value == Language.hindi ? {
+        hindi: null
+    } : value == Language.english ? {
+        english: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;

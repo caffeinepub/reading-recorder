@@ -2,12 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-implement-audio-recording-functionality-that-allows-users-to-create-and-save-voice-recordings",
-      "featureTitle": "Implement audio recording functionality that allows users to create and save voice recordings",
+      "featureId": "feature-add-language-selection-support-for-hindi-and-english-in-the-recording-interface-allowing-users-to-specify-the-language-of-their-recording",
+      "featureTitle": "Add language selection support for Hindi and English in the recording interface, allowing users to specify the language of their recording",
       "files": [
-        "frontend/src/App.tsx",
         "frontend/src/components/RecordingInterface.tsx",
-        "frontend/src/hooks/useAudioRecorder.ts"
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "blob-storage@4.0.0",
@@ -18,19 +17,17 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-7"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-reading-playback-functionality-that-allows-users-to-play-back-recorded-audio",
-      "featureTitle": "Implement reading playback functionality that allows users to play back recorded audio",
+      "featureId": "feature-implement-paragraph-based-organization-for-recordings-allowing-users-to-segment-and-organize-their-recordings-by-paragraph-units",
+      "featureTitle": "Implement paragraph-based organization for recordings, allowing users to segment and organize their recordings by paragraph units",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/PlaybackControls.tsx",
+        "frontend/src/components/RecordingInterface.tsx",
         "frontend/src/components/RecordingsList.tsx",
-        "frontend/src/hooks/useAudioPlayer.ts",
-        "frontend/src/pages/PlaybackPage.tsx"
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "blob-storage@4.0.0",
@@ -41,17 +38,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-8"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-create-a-comprehensive-settings-page-with-all-configuration-options-for-recording-quality-storage-preferences-and-playback-settings",
-      "featureTitle": "Create a comprehensive settings page with all configuration options for recording quality, storage preferences, and playback settings",
+      "featureId": "feature-enhance-the-recordinginterface-component-with-language-selector-dropdown-hindi-english-and-paragraph-number-input-field",
+      "featureTitle": "Enhance the RecordingInterface component with language selector dropdown (Hindi/English) and paragraph number input field",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/hooks/useSettings.ts",
-        "frontend/src/pages/SettingsPage.tsx"
+        "frontend/src/components/RecordingInterface.tsx"
       ],
       "components": [
         "blob-storage@4.0.0",
@@ -62,18 +57,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-10"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-design-a-cohesive-visual-theme-with-warm-accessible-colors-and-clear-typography-that-emphasizes-usability-for-a-recording-and-reading-application",
-      "featureTitle": "Design a cohesive visual theme with warm, accessible colors and clear typography that emphasizes usability for a recording and reading application",
+      "featureId": "feature-update-recordingslist-component-to-display-language-and-paragraph-information-for-each-recording-with-optional-filtering-by-language-and-paragraph",
+      "featureTitle": "Update RecordingsList component to display language and paragraph information for each recording, with optional filtering by language and paragraph",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/Layout.tsx",
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/RecordingsList.tsx",
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "blob-storage@4.0.0",
@@ -84,7 +77,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-6"
+        "REQ-11"
       ],
       "confidence": "high"
     }

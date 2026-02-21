@@ -1,11 +1,10 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 5,
   "summary": "Recording reading app with 2/7 class structure and all settings and recording features",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Microphone icon for recording button in minimalist style (mic-icon.dim_64x64.png)\n- Playback icon for reading button in minimalist style (play-icon.dim_64x64.png)",
   "existing_features": [
     {
       "id": "feature-implement-audio-recording-functionality-that-allows-users-to-create-and-save-voice-recordings",
@@ -36,6 +35,38 @@
       "title": "Design a cohesive visual theme with warm, accessible colors and clear typography that emphasizes usability for a recording and reading application",
       "reqIds": [
         "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-language-selection-support-for-hindi-and-english-in-the-recording-interface-allowing-users-to-specify-the-language-of-their-recording",
+      "title": "Add language selection support for Hindi and English in the recording interface, allowing users to specify the language of their recording",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-paragraph-based-organization-for-recordings-allowing-users-to-segment-and-organize-their-recordings-by-paragraph-units",
+      "title": "Implement paragraph-based organization for recordings, allowing users to segment and organize their recordings by paragraph units",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-the-recordinginterface-component-with-language-selector-dropdown-hindi-english-and-paragraph-number-input-field",
+      "title": "Enhance the RecordingInterface component with language selector dropdown (Hindi/English) and paragraph number input field",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-recordingslist-component-to-display-language-and-paragraph-information-for-each-recording-with-optional-filtering-by-language-and-paragraph",
+      "title": "Update RecordingsList component to display language and paragraph information for each recording, with optional filtering by language and paragraph",
+      "reqIds": [
+        "REQ-11"
       ],
       "version": 1
     }
@@ -78,6 +109,32 @@
       "summary": "Store recordings in the backend with the 2/7 class organizational structure, enabling retrieval and management",
       "reqIds": [
         "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Add Hindi language support for recording and reading",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add English language support for recording and reading",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Enable paragraph-based reading/playback organization",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Update the recording data model to include language (Hindi/English) and paragraph number fields alongside the existing class label structure",
+      "reqIds": [
+        "REQ-9"
       ],
       "status": "pending"
     }
