@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.75rem;
+        
+        /* Warm, accessible color palette for audio/reading app */
+        --background: 0.98 0.01 40;
+        --foreground: 0.2 0.02 40;
+        
+        --card: 1 0 0;
+        --card-foreground: 0.2 0.02 40;
+        
+        --popover: 1 0 0;
+        --popover-foreground: 0.2 0.02 40;
+        
+        /* Warm amber/orange for recording states */
+        --recording: 0.65 0.18 35;
+        --recording-foreground: 0.98 0.01 40;
+        
+        /* Calm blue for playback states */
+        --playback: 0.55 0.15 240;
+        --playback-foreground: 0.98 0 0;
+        
+        --primary: 0.45 0.12 30;
+        --primary-foreground: 0.98 0.01 40;
+        
+        --secondary: 0.95 0.01 40;
+        --secondary-foreground: 0.2 0.02 40;
+        
+        --muted: 0.96 0.01 40;
+        --muted-foreground: 0.5 0.02 40;
+        
+        --accent: 0.94 0.02 40;
+        --accent-foreground: 0.2 0.02 40;
+        
+        --success: 0.55 0.15 145;
+        --success-foreground: 0.98 0 0;
+        
+        --destructive: 0.55 0.22 15;
+        --destructive-foreground: 0.98 0 0;
+        
+        --border: 0.9 0.01 40;
+        --input: 0.9 0.01 40;
+        --ring: 0.45 0.12 30;
+        
+        --chart-1: 0.65 0.18 35;
+        --chart-2: 0.55 0.15 240;
+        --chart-3: 0.55 0.15 145;
+        --chart-4: 0.6 0.18 280;
+        --chart-5: 0.65 0.2 320;
+    }
+
+    .dark {
+        --background: 0.15 0.02 40;
+        --foreground: 0.95 0.01 40;
+        
+        --card: 0.2 0.02 40;
+        --card-foreground: 0.95 0.01 40;
+        
+        --popover: 0.18 0.02 40;
+        --popover-foreground: 0.95 0.01 40;
+        
+        /* Warm amber/orange for recording states - adjusted for dark mode */
+        --recording: 0.7 0.2 35;
+        --recording-foreground: 0.15 0.02 40;
+        
+        /* Calm blue for playback states - adjusted for dark mode */
+        --playback: 0.6 0.18 240;
+        --playback-foreground: 0.98 0 0;
+        
+        --primary: 0.7 0.15 35;
+        --primary-foreground: 0.15 0.02 40;
+        
+        --secondary: 0.25 0.02 40;
+        --secondary-foreground: 0.95 0.01 40;
+        
+        --muted: 0.25 0.02 40;
+        --muted-foreground: 0.6 0.02 40;
+        
+        --accent: 0.3 0.03 40;
+        --accent-foreground: 0.95 0.01 40;
+        
+        --success: 0.6 0.18 145;
+        --success-foreground: 0.15 0.02 40;
+        
+        --destructive: 0.6 0.24 15;
+        --destructive-foreground: 0.98 0 0;
+        
+        --border: 0.3 0.02 40;
+        --input: 0.3 0.02 40;
+        --ring: 0.7 0.15 35;
+        
+        --chart-1: 0.7 0.2 35;
+        --chart-2: 0.6 0.18 240;
+        --chart-3: 0.6 0.18 145;
+        --chart-4: 0.65 0.2 280;
+        --chart-5: 0.7 0.22 320;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}

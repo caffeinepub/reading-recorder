@@ -1,0 +1,131 @@
+{
+  "kind": "build_request",
+  "title": "Create recording and reading app with class structure",
+  "projectName": "Reading Recorder",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a 2/7 class structure in the backend to organize recording and reading data models",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "just Tara app make create one 2/7 class"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend includes a class structure that supports the 2/7 organizational model",
+        "Data models are properly typed and structured for recording and reading features"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement audio recording functionality that allows users to create and save voice recordings",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "recording"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can start and stop audio recording",
+        "Recordings are saved with metadata (timestamp, duration)",
+        "Recording interface shows visual feedback during capture"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement reading playback functionality that allows users to play back recorded audio",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "reading app"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can select and play recordings",
+        "Playback controls include play, pause, and seek",
+        "Display playback progress and duration"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Create a comprehensive settings page with all configuration options for recording quality, storage preferences, and playback settings",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "all setting"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Settings page includes recording quality options",
+        "Settings page includes storage and data management options",
+        "Settings page includes playback preferences",
+        "Settings are persisted and applied across the application"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Store recordings in the backend with the 2/7 class organizational structure, enabling retrieval and management",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "recording",
+          "2/7 class"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores recording metadata and audio data",
+        "Recordings are organized according to the 2/7 class structure",
+        "CRUD operations are available for recording management"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Design a cohesive visual theme with warm, accessible colors and clear typography that emphasizes usability for a recording and reading application",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Application uses a consistent color palette suited for audio/reading applications",
+        "Typography is clear and readable",
+        "UI components follow a unified design language",
+        "Layout prioritizes ease of access to recording and playback controls"
+      ]
+    }
+  ],
+  "constraints": [
+    "Audio recording must work in modern web browsers using Web APIs",
+    "Backend must follow single-actor architecture for all data storage"
+  ],
+  "nonGoals": [
+    "Real-time collaboration features",
+    "External cloud storage integration",
+    "Mobile native app development"
+  ],
+  "imageRequirements": {
+    "required": [
+      "Microphone icon for recording button in minimalist style (mic-icon.dim_64x64.png)",
+      "Playback icon for reading button in minimalist style (play-icon.dim_64x64.png)"
+    ],
+    "edits": []
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Recording reading app with 2/7 class structure and all settings and recording features",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Microphone icon for recording button in minimalist style (mic-icon.dim_64x64.png)\n- Playback icon for reading button in minimalist style (play-icon.dim_64x64.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-audio-recording-functionality-that-allows-users-to-create-and-save-voice-recordings",
+      "title": "Implement audio recording functionality that allows users to create and save voice recordings",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-reading-playback-functionality-that-allows-users-to-play-back-recorded-audio",
+      "title": "Implement reading playback functionality that allows users to play back recorded audio",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-comprehensive-settings-page-with-all-configuration-options-for-recording-quality-storage-preferences-and-playback-settings",
+      "title": "Create a comprehensive settings page with all configuration options for recording quality, storage preferences, and playback settings",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-a-cohesive-visual-theme-with-warm-accessible-colors-and-clear-typography-that-emphasizes-usability-for-a-recording-and-reading-application",
+      "title": "Design a cohesive visual theme with warm, accessible colors and clear typography that emphasizes usability for a recording and reading application",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create 2/7 class structure",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement recording functionality",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Implement reading functionality",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add all settings features",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Create a 2/7 class structure in the backend to organize recording and reading data models",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Store recordings in the backend with the 2/7 class organizational structure, enabling retrieval and management",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Reading Recorder",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

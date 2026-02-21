@@ -1,0 +1,128 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Create recording and reading app with class structure",
+  "requirements": [
+    {
+      "id": "REQ-2",
+      "summary": "Implement audio recording functionality that allows users to create and save voice recordings",
+      "acceptanceCriteria": [
+        "Users can start and stop audio recording",
+        "Recordings are saved with metadata (timestamp, duration)",
+        "Recording interface shows visual feedback during capture"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useAudioRecorder.ts",
+          "operation": "create",
+          "description": "Create a custom hook that manages audio recording state using the Web Audio API (MediaRecorder). Handle recording start/stop, capture audio stream from user's microphone, track recording duration, and convert recorded audio to Uint8Array format. Return recording state, controls (start, stop), audio blob data, duration, and error states."
+        },
+        {
+          "path": "frontend/src/components/RecordingInterface.tsx",
+          "operation": "create",
+          "description": "Create the main recording interface component. Display the generated microphone icon from frontend/public/assets/generated/mic-icon.dim_64x64.png as the primary recording button. Show visual feedback during recording (animated pulse effect, recording duration timer). Include class selection dropdown (2/7 class labels). On stop, use the blob-storage component's ExternalBlob.fromBytes() to prepare the audio data, then call backend.createRecording() with the selected class label and ExternalBlob. Display upload progress using withUploadProgress(). Show success/error feedback after save. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the RecordingInterface component into the main application. Add routing for the recording page at /record. Include navigation that allows users to access the recording interface from the main app navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement reading playback functionality that allows users to play back recorded audio",
+      "acceptanceCriteria": [
+        "Users can select and play recordings",
+        "Playback controls include play, pause, and seek",
+        "Display playback progress and duration"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useAudioPlayer.ts",
+          "operation": "create",
+          "description": "Create a custom hook that manages audio playback state using the HTML5 Audio API. Handle play, pause, seek operations, track current playback time and duration, manage playback progress percentage, and provide loading states. Accept an ExternalBlob as input and use getDirectURL() for optimal streaming and caching."
+        },
+        {
+          "path": "frontend/src/components/PlaybackControls.tsx",
+          "operation": "create",
+          "description": "Create a playback controls component with play/pause button (using the generated frontend/public/assets/generated/play-icon.dim_64x64.png), seek slider, current time display, total duration display, and progress bar. Accept playback state and control functions from useAudioPlayer hook."
+        },
+        {
+          "path": "frontend/src/components/RecordingsList.tsx",
+          "operation": "create",
+          "description": "Create a component that displays all recordings organized by class (2/7 structure). Fetch recordings using backend.getAllRecordingIds() and backend.getRecording() for each ID, or use backend.getRecordingsByClass() for class-filtered views. Display recording metadata (timestamp, class label, duration). Each recording item should be selectable to load into the playback interface. Include delete functionality using backend.deleteRecording(). Use the blob-storage component's ExternalBlob class to handle audio blob references."
+        },
+        {
+          "path": "frontend/src/pages/PlaybackPage.tsx",
+          "operation": "create",
+          "description": "Create the main playback page that combines RecordingsList and PlaybackControls. Manage selected recording state. When a recording is selected, load its ExternalBlob into the audio player. Display the currently playing recording's metadata alongside playback controls."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the PlaybackPage component into the main application. Add routing for the playback page at /playback. Update navigation to include a link to the playback/reading interface."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Create a comprehensive settings page with all configuration options for recording quality, storage preferences, and playback settings",
+      "acceptanceCriteria": [
+        "Settings page includes recording quality options",
+        "Settings page includes storage and data management options",
+        "Settings page includes playback preferences",
+        "Settings are persisted and applied across the application"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useSettings.ts",
+          "operation": "create",
+          "description": "Create a custom hook that manages application settings state using localStorage for persistence. Define settings interface including recording quality (bitrate, sample rate), storage preferences (auto-delete old recordings, max storage), and playback preferences (playback speed, auto-play next). Provide getters, setters, and reset functionality."
+        },
+        {
+          "path": "frontend/src/pages/SettingsPage.tsx",
+          "operation": "create",
+          "description": "Create a comprehensive settings page with organized sections for recording settings (quality options: bitrate selector, sample rate selector), storage settings (storage limit, auto-delete toggle, clear all data button), and playback settings (playback speed slider, auto-play toggle). Use shadcn/ui form components (Select, Slider, Switch) for consistent UI. Display current storage usage statistics. Include save/reset buttons. Settings should be applied immediately or on save depending on the setting type."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the SettingsPage component into the main application. Add routing for the settings page at /settings. Add a settings link/icon to the main navigation menu."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Design a cohesive visual theme with warm, accessible colors and clear typography that emphasizes usability for a recording and reading application",
+      "acceptanceCriteria": [
+        "Application uses a consistent color palette suited for audio/reading applications",
+        "Typography is clear and readable",
+        "UI components follow a unified design language",
+        "Layout prioritizes ease of access to recording and playback controls"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update global styles with a warm, accessible color palette suitable for audio applications. Define CSS custom properties for primary colors (warm amber/orange tones for recording active states, calm blues for playback), neutral grays for backgrounds, and high-contrast text colors for accessibility. Ensure WCAG AA compliance for color contrast ratios."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind configuration with custom theme colors that align with the warm, accessible palette. Define color scales for recording (warm tones), playback (cool tones), and neutral UI elements. Configure typography settings for clear readability: larger base font size, comfortable line height, and legible font weights. Add spacing scales optimized for touch targets and audio control interfaces."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create a main layout component that provides consistent structure across all pages. Include a navigation header with links to recording, playback, and settings pages. Apply the unified design language with the warm color theme. Ensure the layout prioritizes easy access to primary recording and playback actions through prominent navigation or quick-access buttons."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all routed pages with the Layout component to ensure consistent visual theme and navigation across the application."
+        }
+      ]
+    }
+  ]
+}
